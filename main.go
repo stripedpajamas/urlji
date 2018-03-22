@@ -46,7 +46,7 @@ func main() {
 	router.Get("/{id}", getURL)
 	router.Post("/url", createURL)
 
-	http.ListenAndServe(":3000", router)
+	http.ListenAndServe(":80", router)
 }
 
 func getURLKey() ([]byte, error) {
