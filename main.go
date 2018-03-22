@@ -46,7 +46,7 @@ func main() {
 	router.Get("/{id}", getURL)
 	router.Post("/url", createURL)
 
-	http.ListenAndServe(":80", router)
+	http.ListenAndServe(":8080", router)
 }
 
 func getURLKey() ([]byte, error) {
@@ -80,6 +80,15 @@ func createURL(w http.ResponseWriter, r *http.Request) {
 
 		if bucket == nil {
 			return errors.New("No bucket")
+		}
+
+		// first check to see if this url is already in the database
+		cursor := bucket.Cursor()
+		for key, value := cursor.First(); key != nil; key, value = cursor.Next() {
+			if newURL.URL == string(value) {
+				URLKey = key
+				return nil
+			}
 		}
 
 		var urlErr error
