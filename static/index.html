@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>emj</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <style>
+    body {
+      margin: 0;
+    }
+    #app {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      grid-template-rows: 20% 30% 50%;
+    }
+
+    #url-form {
+      grid-column: 2 / 2;
+      grid-row: 2 / 2;
+      justify-content: center;
+      font-size: 40px;
+      color: #bbb;
+      font-family: sans-serif;
+    }
+
+    #shortened-url {
+      font-size: 30px;
+      color: #aaa;
+      font-family: sans-serif;
+    }
+
+    #url-input {
+      display: inline-block;
+      line-height: 30px;
+      font-size: 30px;
+      color: #aaa;
+      width: 50%;
+    }
+
+    #url-button {
+      display: inline-block;
+      font-size: 30px;
+      padding: 5px 10px;
+      margin: 20px auto;
+      color: white;
+      background-color: #DDD;
+      border: 0 none;
+    }
+
+    #url-button:hover {
+      background-color: #CCC;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <form id="url-form" action="#">
+      <div id="prompt">👨‍🚀 urlji 👩‍🚀</div>
+      <div>
+        <input id="url-input" v-model="urlInput" placeholder="url goes here" autofocus>
+        <button id="url-button" @click="submit">🤦‍♀️</button>
+      </div>
+      <div id="shortened-url" @click="selectText('shortened-url')">
+        {{ shortened }}
+      </div>
+    </form>
+  </div>
+</body>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      urlInput: '',
+      shortened: ''
+    },
+    methods: {
+      selectText(id) {
+        window.getSelection().selectAllChildren(document.getElementById(id));
+      },
+      submit(e) {
+        e.preventDefault()
+        if (!this.urlInput) {
+          return
+        }
+
+        fetch('/url', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ url: this.urlInput })
+        }).then(res => res.json())
+          .then((res) => {
+            this.shortened = res.url
+          })
+          .catch(() => {
+            this.shortened = 'sorry, it didn\'t work'
+          })
+      }
+    }
+  })
+</script>
+
+</html>
