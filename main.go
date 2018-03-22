@@ -21,7 +21,7 @@ type URLStruct struct {
 	URL string `json:"url"`
 }
 
-var host = "http://localhost:3000"
+var host = "https://urlji.xyz"
 var dataStore *bolt.DB
 var bucket = []byte("IDs")
 
